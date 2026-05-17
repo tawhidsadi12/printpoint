@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrintPoint Araihazar — Photocopy, Printing & CV Services</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0f0e0c;
+      --paper: #f5f2ec;
+      --cream: #ede9e0;
+      --accent: #c8442a;
+      --muted: #7a7670;
+      --border: #d8d3c8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 4rem;
+      background: rgba(245,242,236,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+    }
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 6rem 4rem 6rem 4rem;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.5rem;
+    }
+    .hero-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.4rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.6rem;
+    }
+    .hero-title em { font-style: italic; color: var(--accent); }
+    .hero-sub {
+      font-size: 1rem; line-height: 1.7;
+      color: var(--muted); max-width: 420px;
+      margin-bottom: 2.8rem;
+    }
+    .btn-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      padding: 0.85rem 2rem;
+      background: var(--ink); color: var(--paper);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem; letter-spacing: 0.06em;
+      border: none; cursor: pointer; text-decoration: none;
+      transition: background 0.25s, transform 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+    .btn-outline {
+      padding: 0.85rem 2rem;
+      background: transparent; color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem; letter-spacing: 0.06em;
+      border: 1px solid var(--border); cursor: pointer; text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--ink); transform: translateY(-2px); }
+
+    .hero-right {
+      background: var(--cream);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-graphic {
+      width: 340px; height: 420px;
+      position: relative;
+    }
+    .paper-stack {
+      position: absolute;
+      width: 220px; height: 280px;
+      border: 1px solid var(--border);
+      background: white;
+      box-shadow: 4px 4px 0 var(--border);
+    }
+    .paper-stack:nth-child(1) { top: 60px; left: 20px; transform: rotate(-5deg); }
+    .paper-stack:nth-child(2) { top: 80px; left: 60px; transform: rotate(2deg); background: var(--paper); }
+    .paper-stack:nth-child(3) { top: 70px; left: 100px; transform: rotate(6deg); }
+    .paper-lines {
+      position: absolute; top: 80px; left: 105px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .paper-lines div {
+      height: 1px; background: var(--border);
+    }
+    .stat-pill {
+      position: absolute;
+      background: var(--ink); color: var(--paper);
+      padding: 0.6rem 1.2rem;
+      font-size: 0.75rem; letter-spacing: 0.04em;
+    }
+    .stat-pill.bottom-left { bottom: 60px; left: -20px; }
+    .stat-pill.top-right { top: 40px; right: -10px; }
+
+    /* ── SERVICES ── */
+    #services {
+      padding: 7rem 4rem;
+    }
+    .section-label {
+      font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 4rem;
+      max-width: 500px;
+      line-height: 1.15;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .service-card {
+      background: var(--paper);
+      padding: 2.8rem 2.5rem;
+      transition: background 0.25s;
+    }
+    .service-card:hover { background: var(--cream); }
+    .service-icon {
+      width: 44px; height: 44px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.6rem; font-size: 1.2rem;
+    }
+    .service-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem; margin-bottom: 0.8rem;
+    }
+    .service-desc {
+      font-size: 0.88rem; line-height: 1.7; color: var(--muted);
+    }
+    .service-list {
+      margin-top: 1rem; list-style: none;
+      font-size: 0.82rem; color: var(--muted);
+    }
+    .service-list li { padding: 0.3rem 0; border-top: 1px solid var(--border); }
+    .service-list li::before { content: "— "; color: var(--accent); }
+
+    /* ── WHY ── */
+    #why {
+      padding: 7rem 4rem;
+      background: var(--ink);
+      color: var(--paper);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+    #why .section-label { color: var(--accent); }
+    #why .section-title { color: var(--paper); }
+    .why-points { display: flex; flex-direction: column; gap: 0; }
+    .why-point {
+      padding: 1.6rem 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex; gap: 1.5rem; align-items: flex-start;
+    }
+    .why-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 0.9rem; color: var(--accent);
+      min-width: 2rem; padding-top: 2px;
+    }
+    .why-text h4 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.05rem; margin-bottom: 0.4rem;
+    }
+    .why-text p { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+    /* ── CONTACT ── */
+    #contact {
+      padding: 7rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .contact-info { padding-top: 0.5rem; }
+    .contact-detail {
+      display: flex; gap: 1rem;
+      padding: 1.4rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .contact-detail-label {
+      min-width: 90px; color: var(--muted);
+      font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;
+      padding-top: 2px;
+    }
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--ink); }
+    textarea.form-input { resize: vertical; min-height: 120px; }
+    .form-submit {
+      align-self: flex-start;
+      padding: 0.85rem 2.2rem;
+      background: var(--ink); color: var(--paper);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem; letter-spacing: 0.06em;
+      border: none; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .form-submit:hover { background: var(--accent); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2rem 4rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.78rem; color: var(--muted);
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0; transform: translateY(24px);
+      animation: fadeUp 0.7s ease forwards;
+    }
+    .fade-up:nth-child(2) { animation-delay: 0.1s; }
+    .fade-up:nth-child(3) { animation-delay: 0.2s; }
+    .fade-up:nth-child(4) { animation-delay: 0.3s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 5rem 2rem 4rem; }
+      #services, #contact { padding: 5rem 2rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      #why { grid-template-columns: 1fr; padding: 5rem 2rem; gap: 3rem; }
+      #contact { grid-template-columns: 1fr; gap: 3rem; }
+      footer { padding: 2rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Print<span>Point</span></div>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#why">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="btn-primary" style="font-size:0.8rem;padding:0.6rem 1.4rem;">Get in Touch</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <span class="hero-tag fade-up">Araihazar, Narayanganj</span>
+      <h1 class="hero-title fade-up">
+        Your documents,<br /><em>perfectly</em><br />done.
+      </h1>
+      <p class="hero-sub fade-up">
+        Photocopy, professional printing, CV writing, and job application assistance — all under one roof in Araihazar.
+      </p>
+      <div class="btn-row fade-up">
+        <a href="#services" class="btn-primary">Our Services</a>
+        <a href="#contact" class="btn-outline">Find Us</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-graphic">
+        <div class="paper-stack"></div>
+        <div class="paper-stack">
+          <div class="paper-lines">
+            <div style="width:120px"></div>
+            <div style="width:90px"></div>
+            <div style="width:140px"></div>
+            <div style="width:80px"></div>
+            <div style="width:110px"></div>
+            <div style="width:95px"></div>
+            <div style="width:130px"></div>
+            <div style="width:85px"></div>
+          </div>
+        </div>
+        <div class="paper-stack"></div>
+        <div class="stat-pill bottom-left">Fast &amp; Affordable</div>
+        <div class="stat-pill top-right">CV Ready in 1 Day</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <p class="section-label">What We Offer</p>
+    <h2 class="section-title">Every service you need, in one place.</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">📄</div>
+        <h3 class="service-name">Photocopy</h3>
+        <p class="service-desc">Black &amp; white and colour photocopying at competitive prices. Fast turnaround for all document sizes.</p>
+        <ul class="service-list">
+          <li>A4 &amp; Legal size</li>
+          <li>B&amp;W and Colour</li>
+          <li>Bulk copy discounts</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🖨️</div>
+        <h3 class="service-name">Photo Printing</h3>
+        <p class="service-desc">High-quality photo prints for personal use, passport photos, ID photos, and decorative prints.</p>
+        <ul class="service-list">
+          <li>Passport / NID size</li>
+          <li>4R, 5R, 6R sizes</li>
+          <li>Glossy &amp; matte finish</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📋</div>
+        <h3 class="service-name">CV Writing</h3>
+        <p class="service-desc">Professional CVs tailored for Bangladeshi job markets — government, private, and NGO applications.</p>
+        <ul class="service-list">
+          <li>Fresh graduate CVs</li>
+          <li>Job-specific formatting</li>
+          <li>Cover letter writing</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📝</div>
+        <h3 class="service-name">Job Applications</h3>
+        <p class="service-desc">We help you fill out and prepare job application forms, attestations, and official documents.</p>
+        <ul class="service-list">
+          <li>Government form fill-up</li>
+          <li>Online application help</li>
+          <li>Document attestation</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🖊️</div>
+        <h3 class="service-name">Typing &amp; Printing</h3>
+        <p class="service-desc">Fast typing, formatting and printing of letters, notices, assignments, and official documents.</p>
+        <ul class="service-list">
+          <li>Bangla &amp; English typing</li>
+          <li>Business letters</li>
+          <li>Academic documents</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏷️</div>
+        <h3 class="service-name">Lamination</h3>
+        <p class="service-desc">Protect your important documents and cards with hot and cold lamination service.</p>
+        <ul class="service-list">
+          <li>ID card lamination</li>
+          <li>Certificate protection</li>
+          <li>All standard sizes</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why">
+    <div>
+      <p class="section-label">Why Choose Us</p>
+      <h2 class="section-title">Trusted by the Araihazar community.</h2>
+      <p style="font-size:0.9rem;color:rgba(255,255,255,0.5);line-height:1.8;max-width:380px;margin-top:1.5rem;">
+        We've been serving students, job seekers, and businesses in Araihazar and the surrounding area with honest, fast, and affordable services.
+      </p>
+    </div>
+    <div class="why-points">
+      <div class="why-point">
+        <span class="why-num">01</span>
+        <div class="why-text">
+          <h4>Fast Turnaround</h4>
+          <p>Most services are ready same day. CVs are delivered within 24 hours.</p>
+        </div>
+      </div>
+      <div class="why-point">
+        <span class="why-num">02</span>
+        <div class="why-text">
+          <h4>Affordable Pricing</h4>
+          <p>Fair prices for everyone — students, job seekers, and businesses.</p>
+        </div>
+      </div>
+      <div class="why-point">
+        <span class="why-num">03</span>
+        <div class="why-text">
+          <h4>Professional Quality</h4>
+          <p>Every document is carefully handled and printed to the highest standard.</p>
+        </div>
+      </div>
+      <div class="why-point">
+        <span class="why-num">04</span>
+        <div class="why-text">
+          <h4>Local & Friendly</h4>
+          <p>We understand the local needs and are always happy to help and advise.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+<section id="contact">
+  <div class="contact-info">
+    <p class="section-label">Find Us</p>
+    <h2 class="section-title" style="margin-bottom:2rem;">
+      Come visit or get in touch.
+    </h2>
+
+    <div class="contact-detail">
+      <span class="contact-detail-label">Location</span>
+      <span>Araihazar, Narayanganj, Dhaka Division</span>
+    </div>
+
+    <div class="contact-detail">
+      <span class="contact-detail-label">Hours</span>
+      <span>
+        Sat – Thu: 9 AM – 9 PM<br />
+        Fri: 2 PM – 9 PM
+      </span>
+    </div>
+
+    <div class="contact-detail">
+      <span class="contact-detail-label">Services</span>
+      <span>Walk-in welcome. No appointment needed.</span>
+    </div>
+  </div>
+
+  <div>
+    <p class="section-label">Send a Message</p>
+
+    <h3 style="
+      font-family:'DM Serif Display',serif;
+      font-size:1.4rem;
+      margin-bottom:1.8rem;
+      letter-spacing:-0.01em;
+    ">
+      We'll get back to you quickly.
+    </h3>
+
+    <form 
+      action="https://formsubmit.co/tawhidsadi12@gmail.com" 
+      method="POST"
+      class="contact-form"
+    >
+
+      <!-- FormSubmit Settings -->
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_subject" value="New Website Contact Message">
+      <input type="hidden" name="_template" value="table">
+
+      <!-- Optional Redirect After Submit -->
+      <!-- Replace with your website URL -->
+      <!--
+      <input type="hidden" name="_next" value="https://yourwebsite.com/thank-you.html">
+      -->
+
+      <input 
+        type="text" 
+        name="name"
+        class="form-input" 
+        placeholder="Your name" 
+        required
+      />
+
+      <input 
+        type="tel" 
+        name="phone"
+        class="form-input" 
+        placeholder="Phone number" 
+        required
+      />
+
+      <select 
+        name="service"
+        class="form-input"
+        required
+      >
+        <option value="" disabled selected>Select a service</option>
+        <option>Photocopy</option>
+        <option>Photo Printing</option>
+        <option>CV Writing</option>
+        <option>Job Application Help</option>
+        <option>Typing & Printing</option>
+        <option>Lamination</option>
+      </select>
+
+      <textarea 
+        name="message"
+        class="form-input" 
+        placeholder="Your message or requirements..."
+        required
+      ></textarea>
+
+      <button type="submit" class="form-submit">
+        Send Message →
+      </button>
+
+    </form>
+  </div>
+</section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2025 PrintPoint Araihazar. All rights reserved.</span>
+    <span>Araihazar, Narayanganj, Bangladesh</span>
+  </footer>
+
+</body>
+</html>
